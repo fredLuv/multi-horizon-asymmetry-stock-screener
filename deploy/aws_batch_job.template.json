@@ -1,0 +1,14 @@
+{
+  "jobName": "qrt-research-platform-run",
+  "jobQueue": "REPLACE_WITH_JOB_QUEUE",
+  "jobDefinition": "REPLACE_WITH_JOB_DEFINITION",
+  "containerOverrides": {
+    "environment": [
+      { "name": "DATA_SOURCE_PATH", "value": "data/raw/spy_us_daily.csv" },
+      { "name": "OUTPUT_DIR", "value": "outputs" },
+      { "name": "RUN_MODE", "value": "thread" },
+      { "name": "MAX_WORKERS", "value": "4" },
+      { "name": "LOG_LEVEL", "value": "INFO" }
+    ]
+  }
+}
