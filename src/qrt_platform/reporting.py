@@ -3,8 +3,10 @@ from __future__ import annotations
 import csv
 import json
 from dataclasses import asdict
+from io import TextIOWrapper
 from pathlib import Path
 from tempfile import NamedTemporaryFile
+from types import TracebackType
 
 from .experiment import ExperimentRow
 
@@ -69,24 +71,31 @@ def _atomic_write_text(path: Path, content: str) -> None:
 class _atomic_open_csv:
     def __init__(self, path: Path) -> None:
         self._path = path
-        self._tmp_file = None
-        self._tmp_path = None
+        self._handle: TextIOWrapper | None = None
+        self._tmp_path: Path | None = None
 
-    def __enter__(self):
-        self._tmp_file = NamedTemporaryFile(
+    def __enter__(self) -> TextIOWrapper:
+        tmp_file = NamedTemporaryFile(
             "w",
             encoding="utf-8",
             newline="",
             dir=self._path.parent,
             delete=False,
         )
-        self._tmp_path = Path(self._tmp_file.name)
-        return self._tmp_file
+        self._tmp_path = Path(tmp_file.name)
+        tmp_file.close()
+        self._handle = self._tmp_path.open("w", encoding="utf-8", newline="")
+        return self._handle
 
-    def __exit__(self, exc_type, exc, tb) -> None:
-        if self._tmp_file is None or self._tmp_path is None:
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc: BaseException | None,
+        tb: TracebackType | None,
+    ) -> None:
+        if self._handle is None or self._tmp_path is None:
             return
-        self._tmp_file.close()
+        self._handle.close()
         if exc_type is None:
             self._tmp_path.replace(self._path)
         else:

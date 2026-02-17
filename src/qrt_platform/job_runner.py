@@ -8,7 +8,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from .data import CsvBarLoader
-from .experiment import StrategySpec, run_experiment_parallel
+from .experiment import RunMode, StrategySpec, run_experiment_parallel
 from .models import BacktestConfig
 from .reporting import write_experiment_csv, write_experiment_json
 from .strategies import BuyAndHoldStrategy, FlatStrategy, MovingAverageCrossStrategy
@@ -23,7 +23,8 @@ def run_job() -> int:
 
     data_path = Path(os.getenv("DATA_SOURCE_PATH", "data/raw/spy_us_daily.csv"))
     output_dir = Path(os.getenv("OUTPUT_DIR", "outputs"))
-    run_mode = os.getenv("RUN_MODE", "thread")
+    run_mode_raw = os.getenv("RUN_MODE", "thread")
+    run_mode: RunMode = "process" if run_mode_raw == "process" else "thread"
     max_workers = int(os.getenv("MAX_WORKERS", "4"))
 
     if not data_path.exists():

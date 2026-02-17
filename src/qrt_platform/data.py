@@ -39,7 +39,7 @@ class YFinanceLoader:
 
     def load(self, symbol: str, period: str = "max", interval: str = "1d") -> list[Bar]:
         try:
-            import yfinance as yf
+            import yfinance as yf  # type: ignore[import-not-found]
         except ImportError as exc:
             raise RuntimeError(
                 "yfinance is not installed. Install with: pip install yfinance pandas"

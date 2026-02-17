@@ -95,7 +95,7 @@ def _annualize(total_return: float, periods: int, periods_per_year: int) -> floa
     growth = 1.0 + total_return
     if growth <= 0.0:
         return -1.0
-    return growth ** (periods_per_year / periods) - 1.0
+    return float(growth ** (periods_per_year / periods) - 1.0)
 
 
 def _annualized_volatility(period_returns: Sequence[float], periods_per_year: int) -> float:

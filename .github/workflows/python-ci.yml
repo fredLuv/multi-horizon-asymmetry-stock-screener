@@ -2,18 +2,11 @@ name: python-ci
 
 on:
   push:
-    paths:
-      - "python_research_platform/**"
   pull_request:
-    paths:
-      - "python_research_platform/**"
 
 jobs:
   quality:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: python_research_platform
 
     steps:
       - name: Checkout
@@ -27,7 +20,7 @@ jobs:
       - name: Install package + dev deps
         run: |
           python -m pip install --upgrade pip
-          python -m pip install -e .[dev]
+          python -m pip install -e '.[dev]'
 
       - name: Unit tests
         run: PYTHONPATH=src python -m unittest discover -s tests -v
