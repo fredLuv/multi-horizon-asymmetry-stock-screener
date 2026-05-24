@@ -90,8 +90,16 @@ def load_and_update_cache(prices_path="outputs/daily_prices.csv", volumes_path="
     return df_prices, df_volumes
 
 def compute_mhc_qas(prices_series):
+    # Pre-calculate rolling 3-month (63 trading days) returns
+    ret_3m = prices_series.pct_change(63).dropna().values
+    
+    max_len = len(ret_3m)
+    if max_len < 126:  # Need at least the 0.5y horizon (126 days)
+        return None
+        
     # Horizons: 0.5y (126 days), 1.0y (252 days), 2.0y (504 days), 2.5y (625 days)
-    horizons = [126, 252, 504, 625]
+    # Dynamically clamp to the maximum available returns length
+    horizons = [126, min(252, max_len), min(504, max_len), min(625, max_len)]
     weights = [0.40, 0.30, 0.20, 0.10]
     
     mhc_qas = 0.0
@@ -99,12 +107,6 @@ def compute_mhc_qas(prices_series):
     mhc_mean = 0.0
     mhc_ar = 0.0
     
-    # Pre-calculate rolling 3-month (63 trading days) returns
-    ret_3m = prices_series.pct_change(63).dropna().values
-    
-    if len(ret_3m) < 688:  # 625 + 63 = 688 days required for full baseline
-        return None
-        
     for h, w in zip(horizons, weights):
         # Slice for the specific horizon
         h_ret = ret_3m[-h:]
