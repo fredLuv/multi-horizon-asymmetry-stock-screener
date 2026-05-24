@@ -1,3 +1,29 @@
+"""
+==========================================================================================
+QRT PLATFORM CORE SYSTEM - INGESTION, CACHING, & STRATEGY ENGINE
+Module Name: qrt_platform.stock_picker
+Repository Context: python_research_platform_gpt_assisted
+
+DESIGN RATIONALE:
+Historically named 'stock_picker.py' as part of the initial QRT quantitative track demo models,
+this module has evolved into the unified Core Market Data Ingestion, Database Caching, and 
+Algorithmic Allocation Engine of the 'python_research_platform_gpt_assisted' repository.
+
+CORE RESPONSIBILITIES:
+1. EXCHANGE REGISTRY INGESTION:
+   - fetch_nasdaq_nyse_universe(): Downloads and parses official listings directories from exchange directories.
+   - fetch_filtered_universe(mode): Scrapes Wikipedia sector listings to compile S&P 500, 400, 600 (or S&P 1500).
+2. PARALLEL BATCH MARKET DATA INGESTION:
+   - fetch_prices_yfinance_batched(): Core high-throughput parallel downloader that fetches historical OHLCV 
+     market data in throttled batches to fully bypass Yahoo Finance API rate limits.
+3. CACHING OPERATIONS:
+   - save_price_cache() & load_price_cache(): Standardized local CSV database operations to preserve bandwidth.
+4. QUANTITATIVE STRATEGY RUNNER:
+   - run_trend_continuation_strategy(): Executes our multi-factor alpha strategy ranking momentum, trend quality,
+     and volatility-adjusted efficiency to output weighted target portfolios.
+==========================================================================================
+"""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
