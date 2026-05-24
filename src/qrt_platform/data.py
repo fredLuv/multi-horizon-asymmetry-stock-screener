@@ -89,7 +89,7 @@ class CsvBarLoader:
         keys.extend([key for key in candidates if key in headers])
         for key in keys:
             raw = row.get(key)
-            if raw in (None, ""):
+            if raw is None or raw == "":
                 continue
             try:
                 return float(raw)

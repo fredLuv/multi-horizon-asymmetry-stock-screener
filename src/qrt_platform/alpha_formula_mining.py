@@ -306,7 +306,7 @@ def _pearson(x: list[float], y: list[float]) -> float:
     vy = sum((b - my) ** 2 for b in y)
     if vx <= 1e-12 or vy <= 1e-12:
         return 0.0
-    return cov / (vx * vy) ** 0.5
+    return float(cov / (vx * vy) ** 0.5)
 
 
 def _std(values: list[float]) -> float:
@@ -316,7 +316,7 @@ def _std(values: list[float]) -> float:
     var = sum((x - mu) ** 2 for x in values) / (len(values) - 1)
     if var <= 0:
         return 0.0
-    return var**0.5
+    return float(var**0.5)
 
 
 def _consistency(signal: list[float | None], forward: list[float | None]) -> float:

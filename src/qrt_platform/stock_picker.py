@@ -26,13 +26,15 @@ CORE RESPONSIBILITIES:
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-from math import sqrt
-from pathlib import Path
-from typing import Sequence
+from typing import Any
+
 import re
 import time
+from collections.abc import Sequence
+from dataclasses import dataclass
 from io import StringIO
+from math import sqrt
+from pathlib import Path
 
 from .chart_links import build_chart_links
 
@@ -229,7 +231,7 @@ def fetch_prices_yfinance_batched(
     min_history_rows: int = 260,
     max_retries: int = 3,
     retry_sleep_seconds: float = 1.0,
-) -> tuple[object, object]:  # pragma: no cover - runtime network integration
+) -> tuple[Any, Any]:  # pragma: no cover - runtime network integration
     import pandas as pd  # type: ignore[import-not-found]
 
     if batch_size <= 0:

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass
 from math import log, sqrt
 from statistics import mean
@@ -24,7 +25,7 @@ class _VarNode:
 @dataclass(frozen=True, slots=True)
 class _CallNode:
     func: str
-    args: tuple["_AstNode", ...]
+    args: tuple[_AstNode, ...]
 
 
 _AstNode = _NumberNode | _VarNode | _CallNode
@@ -143,7 +144,7 @@ def _binary(
 
 
 def _unary(
-    args: list[list[float | None]], name: str, fn: callable
+    args: list[list[float | None]], name: str, fn: Callable[[float], float | None]
 ) -> list[float | None]:
     if len(args) != 1:
         raise FormulaParseError(f"{name} expects 1 argument")

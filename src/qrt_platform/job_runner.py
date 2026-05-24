@@ -7,9 +7,9 @@ from dataclasses import asdict
 from datetime import UTC, datetime
 from pathlib import Path
 
+from .alpha_formula_mining import FormulaChainOfAlpha, FormulaMiningConfig, FormulaThresholds
 from .data import CsvBarLoader
 from .experiment import RunMode, StrategySpec, run_experiment_parallel
-from .alpha_formula_mining import FormulaChainOfAlpha, FormulaMiningConfig, FormulaThresholds
 from .models import BacktestConfig
 from .reporting import (
     write_experiment_csv,

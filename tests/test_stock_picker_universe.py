@@ -2,7 +2,6 @@ import unittest
 
 from qrt_platform.stock_picker import _parse_nasdaq_listed, _parse_other_listed
 
-
 NASDAQ_SAMPLE = """Symbol|Security Name|Market Category|Test Issue|Financial Status|Round Lot Size|ETF|NextShares
 AAPL|Apple Inc. Common Stock|Q|N|N|100|N|N
 QQQ|Invesco QQQ Trust Series 1|Q|N|N|100|Y|N
