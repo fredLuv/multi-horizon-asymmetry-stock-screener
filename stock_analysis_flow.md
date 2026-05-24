@@ -51,7 +51,7 @@ This data is aligned, concatenated, and saved back to the database.
 ### B. Ingestion Safeguards & Liquidity Filtering
 1. **Average Daily Volume (ADV) Filter:** To protect the database from low-float, illiquid micro-caps, we calculate a rolling volume matrix:
    $$\text{ADV}_{i} = \frac{1}{N}\sum_{t=1}^N \text{Volume}_{i, t} > 100,000\text{ shares}$$
-   This screens out 3,371 tickers down to 3,228 highly liquid securities, avoiding rate-limiting penalties on stale counters.
+   This screens out low-float tickers down to a highly active, liquid universe, avoiding rate-limiting penalties on stale listings.
 2. **Dynamic Horizon Clamping:** Historical indexes sometimes contain short series. The engine dynamically clamps horizons to the maximum available return length to prevent index out-of-bounds crashes:
    $$H_{actual} = \min(H_{target}, \text{len}(R_{t}))$$
    This prevents crashes and ensures continuity across all listings.
@@ -119,21 +119,21 @@ To capture deep value asymmetries, we calculate the Enterprise Value ($EV$):
 $$EV = \text{Market Cap} + \text{Total Debt} - \text{Total Cash}$$
 If $EV < 0$ (Net-Net balance sheet cushion), it triggers an **immediate buy-in override**, as the net-cash cushion completely covers the cost of acquiring the business.
 
-### C. Case Comparison: DECK vs. CROX vs. URBN (3-Year Trailing Profiles)
+### C. Case Comparison: Trailing Performance Profiles (Ticker A vs. Ticker B vs. Ticker C)
 
-*   **Deckers Outdoor (DECK) - Premium Compounder:**
-    *   **Net Margin Trend:** Expanded from 14.1% to 19.3%.
-    *   **FCF Margin:** Highly stable at ~18.2%.
-    *   **Balance Sheet:** Extreme cash buffer (Net Cash grew from $735M to $1.61B; Net Debt $= -$1.61B).
-    *   **Asset Lightness:** Highly outsourcing model, excellent ROIC.
-*   **Crocs (CROX) - Leveraged Value Trap:**
-    *   **Net Margin Trend:** Stable around 18.5%.
-    *   **FCF Margin:** Highly organic at ~16.8%.
-    *   **Balance Sheet:** Severely dragged by debt (Net Debt $= +$1.48B). Highly leveraged, leaving zero margin for consumer demand shifts.
-*   **Urban Outfitters (URBN) - Capital Heavy Retail:**
-    *   **Net Margin Trend:** Low margin cap at ~7.5%.
-    *   **FCF Margin:** Low at ~5.3% due to high brick-and-mortar capital expenditures.
-    *   **Balance Sheet:** Carrying -$850M Net Debt, highly exposed to commercial real estate leases.
+*   **Asset-Light Premium Compounder (Ticker A):**
+    *   **Net Margin Trend:** Expanded from 14.1% to 19.3% while scaling.
+    *   **FCF Margin:** Highly stable and organic at ~18.2%.
+    *   **Balance Sheet:** Extreme cash cushion (Net Cash grew from $735M to $1.61B; Net Debt $< 0$).
+    *   **Asset Lightness:** Relies on outsourced manufacturing with strong brand equity, generating exceptional ROE and ROIC.
+*   **Leveraged Manufacturer (Ticker B):**
+    *   **Net Margin Trend:** High but flat net margins around 18.5%.
+    *   **FCF Margin:** Consistent at ~16.8%.
+    *   **Balance Sheet:** Heavily dragged by acquisition debt (Net Debt $= +\$1.48\text{B}$), leaving zero safety buffer for consumer spending contractions.
+*   **Capital-Heavy Physical Retailer (Ticker C):**
+    *   **Net Margin Trend:** Low margins capped at ~7.5%.
+    *   **FCF Margin:** Depressed at ~5.3% due to persistent brick-and-mortar lease liabilities and physical footprint capital requirements.
+    *   **Balance Sheet:** Substantial lease liabilities and Net Debt (approx. $-\$850\text{M}$ Net Cash balance), highly exposed to commercial real estate shifts.
 
 ---
 
@@ -157,7 +157,7 @@ When a high-quality compounder undergoes a macro correction, panic expands the o
 ### A. Core Option Rules
 1. **Time-to-Expiration (DTE):** Select **30 to 45 Days to Expiration (DTE)**. This targets the steepest inflection of the Theta (time) decay curve.
 2. **Delta Range:** Target a **Delta of 0.15 to 0.23** (approx. 80-85% probability of expiring out-of-the-money).
-3. **Bollinger Band & Wicks Alignment:** Strike must sit at or below the **Weekly Lower Bollinger Band** and align with **historical macro double-bottom wick-lows** (e.g., $195.00 Put for EXPE, $13.50 Put for ETHA).
+3. **Bollinger Band & Wicks Alignment:** Strike must sit at or below the **Weekly Lower Bollinger Band** and align with **historical macro double-bottom support levels** to protect against stop-loss sweep spikes.
 
 ### B. Option Valuation and Greeks Model (Black-Scholes-Merton)
 $$\text{Premium} (C_0, P_0) = \mathbf{BSM}(S, K, r, \sigma, T)$$
@@ -176,7 +176,7 @@ If the market undergoes a severe flush and the cash-secured put approaches the m
 | Trigger | Spot Decline | Tactical Action | Financial Net-Flow | Rationale |
 | :--- | :--- | :--- | :--- | :--- |
 | **Zone 1: Pre-emptive** | ~5% Decline | Roll **Down & Out** to a lower strike (30 DTE extension) | Even Roll / Minor Credit ($\ge +\$0.00$) | Resets Delta back to $\le 0.20$ early, preventing gamma squeeze. |
-| **Zone 2: ATM Combat** | ~10% Decline (At-The-Money) | **Option A (Income):** Roll **Out** at same strike to 30 DTE.<br>**Option B (Defense):** Roll **Down & Out** to lower strike. | **Option A:** Rich Net Credit ($+\$0.20$ to $+\$0.40$)<br>**Option B:** Small Net Debit ($-\$0.03$) | Pocket large premium expansion or pay a tiny debit to push the entry commitment $0.50 lower. |
+| **Zone 2: ATM Combat** | ~10% Decline (At-The-Money) | **Option A (Income):** Roll **Out** at same strike to 30 DTE.<br>**Option B (Defense):** Roll **Down & Out** to lower strike. | **Option A:** Rich Net Credit ($+\$0.20$ to $+\$0.40$)<br>**Option B:** Small Net Debit ($-\$0.03$) | Pocket large premium expansion or pay a tiny debit to push the entry commitment lower. |
 | **Zone 3: Deep ITM** | $>15\%$ Decline (In-The-Money) | **Option A (Assign):** Accept Assignment.<br>**Option B (Defer):** Roll **Out** at same strike to 45 DTE. | **Option A:** Capital Outlay (100% assignment)<br>**Option B:** Massive Net Credit ($+\$0.25$ to $+\$0.50$) | Accept the asset at a deep discount, or extend the runway to defer cash assignment while building premium cushions. |
 
 ### Rolling Decision Tree
@@ -218,19 +218,19 @@ python scripts/run_daily_pipeline.py
 *   **Performance Chart:** `outputs/asymmetry_leaders_performance.png`
 
 ### B. Analyze Stock Fundamentals & Balance Sheet Margins
-Evaluate any ticker's trailing margin trends, cash position, capital lightness, and owner's earnings profile (e.g., DECK):
+Evaluate any ticker's trailing margin trends, cash position, capital lightness, and owner's earnings profile:
 ```bash
-python scripts/analyze_stock.py --ticker DECK
+python scripts/analyze_stock.py --ticker TICKER_A
 ```
 
 ### C. Calculate Option Yields and Black-Scholes Greeks
 Find the premium yield, annualized return, Delta, Gamma, Theta, and Vega for any cash-secured put position:
 ```bash
-python scripts/analyze_options.py --ticker EXPE --strike 195.00 --dte 45 --iv 0.509
+python scripts/analyze_options.py --ticker TICKER_D --strike 195.00 --dte 45 --iv 0.509
 ```
 
 ### D. Analyze Multi-Ticker 3-Year Trailing Financial Trends
 Compare multiple stocks simultaneously to evaluate margins, debt levels, and cash flow stability side-by-side:
 ```bash
-python scripts/analyze_trends.py --tickers DECK,ANF,URBN,CROX
+python scripts/analyze_trends.py --tickers TICKER_A,TICKER_B,TICKER_C
 ```
