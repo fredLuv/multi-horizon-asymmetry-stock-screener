@@ -8,6 +8,12 @@ from datetime import datetime
 class Bar:
     ts: datetime
     close: float
+    open: float | None = None
+    high: float | None = None
+    low: float | None = None
+    volume: float | None = None
+    vwap: float | None = None
+    amount: float | None = None
 
 
 @dataclass(frozen=True, slots=True)

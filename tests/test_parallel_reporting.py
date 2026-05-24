@@ -14,7 +14,10 @@ from qrt_platform import (
     run_experiment_parallel,
     write_experiment_csv,
     write_experiment_json,
+    write_stock_picker_csv,
+    write_stock_picker_json,
 )
+from qrt_platform.stock_picker import StockPickerBacktestResult, StockPickerRunResult
 
 
 class ParallelAndReportingTests(unittest.TestCase):
@@ -67,6 +70,43 @@ class ParallelAndReportingTests(unittest.TestCase):
             self.assertGreaterEqual(len(payload), 1)
             self.assertIn("strategy", payload[0])
             self.assertIn("sharpe", payload[0])
+
+    def test_stock_picker_reporting_writes_csv_and_json(self) -> None:
+        result = StockPickerRunResult(
+            latest_date="2026-02-19",
+            latest_picks=["AAPL", "MSFT"],
+            latest_weights={"AAPL": 0.5, "MSFT": 0.5},
+            latest_chart_links={
+                "AAPL": "https://finance.yahoo.com/quote/AAPL/chart",
+                "MSFT": "https://finance.yahoo.com/quote/MSFT/chart",
+            },
+            latest_tradingview_links={
+                "AAPL": "https://www.tradingview.com/chart/?symbol=NASDAQ%3AAAPL",
+                "MSFT": "https://www.tradingview.com/chart/?symbol=NASDAQ%3AMSFT",
+            },
+            backtest=StockPickerBacktestResult(
+                total_return=0.1,
+                annualized_return=0.08,
+                volatility=0.12,
+                sharpe=0.67,
+                max_drawdown=0.14,
+                turnover=10.0,
+                win_rate=0.55,
+                periods=700,
+            ),
+        )
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            tmp = Path(tmp_dir)
+            csv_path = tmp / "picks.csv"
+            json_path = tmp / "picks.json"
+            write_stock_picker_csv(result, csv_path)
+            write_stock_picker_json(result, json_path)
+            self.assertTrue(csv_path.exists())
+            self.assertTrue(json_path.exists())
+            self.assertIn("yahoo_chart", csv_path.read_text(encoding="utf-8"))
+            payload = json.loads(json_path.read_text(encoding="utf-8"))
+            self.assertIn("latest_picks", payload)
 
 
 if __name__ == "__main__":

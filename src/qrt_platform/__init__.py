@@ -1,4 +1,23 @@
+from .alpha_mining import (
+    AlphaMiningConfig,
+    AlphaMiningReport,
+    ChainOfAlphaLite,
+    EvaluatedFactor,
+    FactorMetrics,
+    FactorSpec,
+    FactorThresholds,
+)
+from .alpha_formula_mining import (
+    EvaluatedFormula,
+    FormulaChainOfAlpha,
+    FormulaMetrics,
+    FormulaMiningConfig,
+    FormulaMiningReport,
+    FormulaSpec,
+    FormulaThresholds,
+)
 from .backtest import run_backtest
+from .chart_links import ChartLink, build_chart_link, build_chart_links
 from .data import BarLoader, CsvBarLoader, YFinanceLoader
 from .experiment import (
     ExperimentRow,
@@ -9,12 +28,53 @@ from .experiment import (
 )
 from .job_runner import run_job
 from .models import BacktestConfig, BacktestResult, Bar
-from .reporting import write_experiment_csv, write_experiment_json
+from .factor_dsl import FactorDslEngine, FormulaParseError
+from .reporting import (
+    write_experiment_csv,
+    write_experiment_json,
+    write_formula_factors_csv,
+    write_formula_factors_json,
+    write_stock_picker_csv,
+    write_stock_picker_json,
+)
+from .stock_picker import (
+    SECTOR_ETF_BY_GICS,
+    StockPickerBacktestResult,
+    StockPickerConfig,
+    StockPickerRunResult,
+    fetch_filtered_universe,
+    fetch_nasdaq_nyse_universe,
+    fetch_prices_yfinance,
+    fetch_prices_yfinance_batched,
+    fetch_sp500_sector_map,
+    load_price_cache,
+    run_trend_continuation_strategy,
+    save_price_cache,
+)
 from .strategies import BuyAndHoldStrategy, FlatStrategy, MovingAverageCrossStrategy
 from .strategy import Strategy
 
 __all__ = [
     "Bar",
+    "FactorSpec",
+    "FactorMetrics",
+    "EvaluatedFactor",
+    "FactorThresholds",
+    "AlphaMiningConfig",
+    "AlphaMiningReport",
+    "ChainOfAlphaLite",
+    "FormulaSpec",
+    "FormulaMetrics",
+    "EvaluatedFormula",
+    "FormulaThresholds",
+    "FormulaMiningConfig",
+    "FormulaMiningReport",
+    "FormulaChainOfAlpha",
+    "FactorDslEngine",
+    "FormulaParseError",
+    "ChartLink",
+    "build_chart_link",
+    "build_chart_links",
     "BacktestConfig",
     "BacktestResult",
     "BarLoader",
@@ -27,6 +87,22 @@ __all__ = [
     "run_experiment_parallel",
     "write_experiment_csv",
     "write_experiment_json",
+    "write_formula_factors_csv",
+    "write_formula_factors_json",
+    "write_stock_picker_csv",
+    "write_stock_picker_json",
+    "StockPickerConfig",
+    "StockPickerBacktestResult",
+    "StockPickerRunResult",
+    "SECTOR_ETF_BY_GICS",
+    "fetch_filtered_universe",
+    "fetch_sp500_sector_map",
+    "fetch_prices_yfinance",
+    "fetch_prices_yfinance_batched",
+    "fetch_nasdaq_nyse_universe",
+    "save_price_cache",
+    "load_price_cache",
+    "run_trend_continuation_strategy",
     "BuyAndHoldStrategy",
     "FlatStrategy",
     "MovingAverageCrossStrategy",
