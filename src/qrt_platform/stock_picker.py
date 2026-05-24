@@ -2,12 +2,12 @@
 ==========================================================================================
 QRT PLATFORM CORE SYSTEM - INGESTION, CACHING, & STRATEGY ENGINE
 Module Name: qrt_platform.stock_picker
-Repository Context: python_research_platform_gpt_assisted
+Repository Context: multi-horizon-asymmetry-stock-screener
 
 DESIGN RATIONALE:
 Historically named 'stock_picker.py' as part of the initial QRT quantitative track demo models,
 this module has evolved into the unified Core Market Data Ingestion, Database Caching, and 
-Algorithmic Allocation Engine of the 'python_research_platform_gpt_assisted' repository.
+Algorithmic Allocation Engine of the 'multi-horizon-asymmetry-stock-screener' repository.
 
 CORE RESPONSIBILITIES:
 1. EXCHANGE REGISTRY INGESTION:

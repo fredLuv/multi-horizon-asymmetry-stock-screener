@@ -19,8 +19,8 @@ For a comprehensive review of our quantitative and fundamental framework, read t
 Initialize a fresh environment and run local quality gates:
 
 ```bash
-git clone git@github.com:fredLuv/python_research_platform_gpt_assisted.git
-cd python_research_platform_gpt_assisted
+git clone git@github.com:fredLuv/multi-horizon-asymmetry-stock-screener.git
+cd multi-horizon-asymmetry-stock-screener
 ./scripts/bootstrap.sh
 source .venv/bin/activate
 ./scripts/check.sh
