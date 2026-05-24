@@ -3,8 +3,10 @@
 ## Container run (local)
 
 ```bash
-cd /Users/fred/Desktop/IMC-Java-Code/python_research_platform
+# Build the Docker image from the repository root
 docker build -t qrt-platform:latest .
+
+# Run the containerized quantitative strategy job
 docker run --rm -e RUN_MODE=thread -e MAX_WORKERS=4 qrt-platform:latest
 ```
 
